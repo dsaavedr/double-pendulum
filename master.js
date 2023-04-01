@@ -49,7 +49,7 @@ function init() {
     } else {
         PADDING_TOP = HEIGHT * 0.15;
         LINE_1 = HEIGHT * 0.4;
-        LINE_2 = HEIGHT * 0.2;
+        LINE_2 = HEIGHT * 0.3;
         RADIUS = 20;
         LINE_WIDTH = 4;
     }
