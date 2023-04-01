@@ -20,7 +20,7 @@ const canvas = document.getElementById("canvas"),
     MASS_1 = 1,
     MASS_2 = 1,
     PADDING_TOP = 200,
-    gravity = 3,
+    G = 3,
     dampening = 0.9975;
 
 const square = num => Math.pow(num, 2);
@@ -94,8 +94,8 @@ function ani() {
     let num1, num2, num3, num4, den;
 
     // Angle1
-    num1 = gravity * (2 * MASS_1 + MASS_2) * sin(angle1);
-    num2 = MASS_2 * gravity * sin(angle1 - 2 * angle2);
+    num1 = G * (2 * MASS_1 + MASS_2) * sin(angle1);
+    num2 = MASS_2 * G * sin(angle1 - 2 * angle2);
     num3 =
         2 *
         sin(angle1 - angle2) *
@@ -108,7 +108,7 @@ function ani() {
     // Angle2
     num1 = 2 * sin(angle1 - angle2);
     num2 = square(angle1V) * LINE_1 * (MASS_1 + MASS_2);
-    num3 = gravity * (MASS_1 + MASS_2) * cos(angle1);
+    num3 = G * (MASS_1 + MASS_2) * cos(angle1);
     num4 = square(angle2V) * LINE_2 * MASS_2 * cos(angle1, angle2);
     den = LINE_2 * (2 * MASS_1 + MASS_2 - MASS_2 * cos(2 * angle1 - 2 * angle2));
 
