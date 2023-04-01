@@ -10,3 +10,7 @@ body {
     display: grid;
     place-items: center;
 }
+
+canvas {
+    position: absolute;
+}
