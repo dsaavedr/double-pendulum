@@ -4,8 +4,13 @@ let WIDTH,
     HEIGHT,
     weight1,
     weight2,
+    LINE_1,
+    LINE_2,
+    PADDING_TOP,
+    RADIUS,
+    LINE_WIDTH,
     angle1 = PI / 2,
-    angle2 = 0,
+    angle2 = random(0, 2 * PI),
     angle1V = 0,
     angle1A = 0,
     angle2V = 0,
@@ -15,13 +20,10 @@ const canvas = document.getElementById("canvas"),
     background = document.getElementById("background"),
     ctx = canvas.getContext("2d"),
     backgroundCtx = background.getContext("2d"),
-    LINE_1 = 400,
-    LINE_2 = 300,
-    MASS_1 = 5,
-    MASS_2 = 1,
-    PADDING_TOP = 200,
-    G = 3,
-    BACKGROUND_LINE_COLOR = "rgba(180, 255, 180, 0.8)",
+    MASS_1 = 10,
+    MASS_2 = 2,
+    G = 1.5,
+    BACKGROUND_LINE_COLOR = "rgba(0, 80, 255, 0.8)",
     dampening = 0.9975;
 
 const square = num => Math.pow(num, 2);
@@ -36,6 +38,22 @@ function init() {
     WIDTH = window.innerWidth;
     HEIGHT = window.innerHeight;
 
+    const mobile = HEIGHT > WIDTH;
+
+    if (mobile) {
+        PADDING_TOP = HEIGHT * 0.3;
+        LINE_1 = HEIGHT * 0.2;
+        LINE_2 = HEIGHT * 0.15;
+        RADIUS = 10;
+        LINE_WIDTH = 2;
+    } else {
+        PADDING_TOP = HEIGHT * 0.15;
+        LINE_1 = HEIGHT * 0.4;
+        LINE_2 = HEIGHT * 0.2;
+        RADIUS = 20;
+        LINE_WIDTH = 4;
+    }
+
     canvas.setAttribute("width", WIDTH);
     canvas.setAttribute("height", HEIGHT);
     background.setAttribute("width", WIDTH);
@@ -47,7 +65,7 @@ function init() {
 
     weight1 = new Particle({
         pos: pos1,
-        r: 25,
+        r: RADIUS,
         c: "#88f"
     });
 
@@ -55,12 +73,12 @@ function init() {
 
     weight2 = new Particle({
         pos: Vector.add(pos2, weight1.pos),
-        r: 25,
+        r: RADIUS,
         c: "#f88"
     });
 
     backgroundCtx.translate(WIDTH / 2, PADDING_TOP);
-    backgroundCtx.lineWidth = 5;
+    backgroundCtx.lineWidth = LINE_WIDTH;
     backgroundCtx.strokeStyle = BACKGROUND_LINE_COLOR;
     backgroundCtx.moveTo(weight2.pos.x, weight2.pos.y);
 
