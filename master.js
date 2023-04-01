@@ -4,8 +4,8 @@ let WIDTH,
     HEIGHT,
     weight1,
     weight2,
-    angle1 = PI / 4,
-    angle2 = PI / 2,
+    angle1 = PI / 2,
+    angle2 = 0,
     angle1V = 0,
     angle1A = 0,
     angle2V = 0,
@@ -15,12 +15,13 @@ const canvas = document.getElementById("canvas"),
     background = document.getElementById("background"),
     ctx = canvas.getContext("2d"),
     backgroundCtx = background.getContext("2d"),
-    LINE_1 = 250,
-    LINE_2 = 200,
-    MASS_1 = 1,
+    LINE_1 = 400,
+    LINE_2 = 300,
+    MASS_1 = 5,
     MASS_2 = 1,
     PADDING_TOP = 200,
     G = 3,
+    BACKGROUND_LINE_COLOR = "rgba(180, 255, 180, 0.8)",
     dampening = 0.9975;
 
 const square = num => Math.pow(num, 2);
@@ -42,7 +43,7 @@ function init() {
 
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-    const pos1 = Vector.fromAngle(angle1).setMag(LINE_1);
+    const pos1 = Vector.fromAngle(PI / 2 + angle1).setMag(LINE_1);
 
     weight1 = new Particle({
         pos: pos1,
@@ -50,7 +51,7 @@ function init() {
         c: "#88f"
     });
 
-    const pos2 = Vector.fromAngle(angle2).setMag(LINE_2);
+    const pos2 = Vector.fromAngle(PI / 2 + angle2).setMag(LINE_2);
 
     weight2 = new Particle({
         pos: Vector.add(pos2, weight1.pos),
@@ -60,7 +61,7 @@ function init() {
 
     backgroundCtx.translate(WIDTH / 2, PADDING_TOP);
     backgroundCtx.lineWidth = 5;
-    backgroundCtx.strokeStyle = "rgba(180, 255, 180, 0.5)";
+    backgroundCtx.strokeStyle = BACKGROUND_LINE_COLOR;
     backgroundCtx.moveTo(weight2.pos.x, weight2.pos.y);
 
     ani();
@@ -122,8 +123,8 @@ function ani() {
     angle2V *= dampening;
     angle2 += angle2V;
 
-    weight1.pos = Vector.fromAngle(angle1).setMag(LINE_1);
-    weight2.pos = Vector.add(weight1.pos, Vector.fromAngle(angle2).setMag(LINE_2));
+    weight1.pos = Vector.fromAngle(PI / 2 + angle1).setMag(LINE_1);
+    weight2.pos = Vector.add(weight1.pos, Vector.fromAngle(PI / 2 + angle2).setMag(LINE_2));
 
     requestAnimationFrame(ani);
 }
