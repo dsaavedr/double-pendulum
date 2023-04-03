@@ -14,7 +14,9 @@ let WIDTH,
     angle1V = 0,
     angle1A = 0,
     angle2V = 0,
-    angle2A = 0;
+    angle2A = 0,
+    FPS = 60,
+    FPS_INTERVAL;
 
 const canvas = document.getElementById("canvas"),
     background = document.getElementById("background"),
@@ -28,11 +30,11 @@ const canvas = document.getElementById("canvas"),
 
 const square = num => Math.pow(num, 2);
 
-const requestAnimationFrame =
-    window.requestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.msRequestAnimationFrame;
+// const requestAnimationFrame =
+//     window.requestAnimationFrame ||
+//     window.mozRequestAnimationFrame ||
+//     window.webkitRequestAnimationFrame ||
+//     window.msRequestAnimationFrame;
 
 function init() {
     WIDTH = window.innerWidth;
@@ -53,6 +55,8 @@ function init() {
         RADIUS = 20;
         LINE_WIDTH = 4;
     }
+
+    FPS_INTERVAL = 1000 / FPS;
 
     canvas.setAttribute("width", WIDTH);
     canvas.setAttribute("height", HEIGHT);
@@ -86,65 +90,65 @@ function init() {
 }
 
 function ani() {
-    ctx.beginPath();
-    ctx.clearRect(0, 0, WIDTH, HEIGHT);
-    ctx.closePath();
+    setInterval(function () {
+        ctx.beginPath();
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        ctx.closePath();
 
-    ctx.save();
-    ctx.beginPath();
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = 1;
-    ctx.translate(WIDTH / 2, PADDING_TOP);
-    ctx.moveTo(0, 0);
-    ctx.lineTo(weight1.pos.x, weight1.pos.y);
-    ctx.lineTo(weight2.pos.x, weight2.pos.y);
-    ctx.stroke();
-    ctx.closePath();
-    weight1.show();
-    weight2.show();
-    ctx.restore();
+        ctx.save();
+        ctx.beginPath();
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 1;
+        ctx.translate(WIDTH / 2, PADDING_TOP);
+        ctx.moveTo(0, 0);
+        ctx.lineTo(weight1.pos.x, weight1.pos.y);
+        ctx.lineTo(weight2.pos.x, weight2.pos.y);
+        ctx.stroke();
+        ctx.closePath();
+        weight1.show();
+        weight2.show();
+        ctx.restore();
 
-    backgroundCtx.lineTo(weight2.pos.x, weight2.pos.y);
-    backgroundCtx.clearRect(-WIDTH / 2, -PADDING_TOP, WIDTH * 1.5, HEIGHT + PADDING_TOP);
-    backgroundCtx.stroke();
+        backgroundCtx.lineTo(weight2.pos.x, weight2.pos.y);
+        backgroundCtx.clearRect(-WIDTH / 2, -PADDING_TOP, WIDTH * 1.5, HEIGHT + PADDING_TOP);
+        backgroundCtx.stroke();
 
-    // angular acceleration calculations
-    // TODO: credit myphisicslab.com's article
-    let num1, num2, num3, num4, den;
+        // angular acceleration calculations
+        // TODO: credit myphisicslab.com's article
+        let num1, num2, num3, num4, den;
 
-    // Angle1
-    num1 = G * (2 * MASS_1 + MASS_2) * sin(angle1);
-    num2 = MASS_2 * G * sin(angle1 - 2 * angle2);
-    num3 =
-        2 *
-        sin(angle1 - angle2) *
-        MASS_2 *
-        (square(angle2V) * LINE_2 + square(angle1V) * LINE_1 * cos(angle1 - angle2));
-    den = LINE_1 * (2 * MASS_1 + MASS_2 - MASS_2 * cos(2 * angle1 - 2 * angle2));
+        // Angle1
+        num1 = G * (2 * MASS_1 + MASS_2) * sin(angle1);
+        num2 = MASS_2 * G * sin(angle1 - 2 * angle2);
+        num3 =
+            2 *
+            sin(angle1 - angle2) *
+            MASS_2 *
+            (square(angle2V) * LINE_2 + square(angle1V) * LINE_1 * cos(angle1 - angle2));
+        den = LINE_1 * (2 * MASS_1 + MASS_2 - MASS_2 * cos(2 * angle1 - 2 * angle2));
 
-    angle1A = (-num1 - num2 - num3) / den;
+        angle1A = (-num1 - num2 - num3) / den;
 
-    // Angle2
-    num1 = 2 * sin(angle1 - angle2);
-    num2 = square(angle1V) * LINE_1 * (MASS_1 + MASS_2);
-    num3 = G * (MASS_1 + MASS_2) * cos(angle1);
-    num4 = square(angle2V) * LINE_2 * MASS_2 * cos(angle1, angle2);
-    den = LINE_2 * (2 * MASS_1 + MASS_2 - MASS_2 * cos(2 * angle1 - 2 * angle2));
+        // Angle2
+        num1 = 2 * sin(angle1 - angle2);
+        num2 = square(angle1V) * LINE_1 * (MASS_1 + MASS_2);
+        num3 = G * (MASS_1 + MASS_2) * cos(angle1);
+        num4 = square(angle2V) * LINE_2 * MASS_2 * cos(angle1, angle2);
+        den = LINE_2 * (2 * MASS_1 + MASS_2 - MASS_2 * cos(2 * angle1 - 2 * angle2));
 
-    angle2A = (num1 * (num2 + num3 + num4)) / den;
+        angle2A = (num1 * (num2 + num3 + num4)) / den;
 
-    angle1V += angle1A;
-    angle1V *= dampening;
-    angle1 += angle1V;
+        angle1V += angle1A;
+        angle1V *= dampening;
+        angle1 += angle1V;
 
-    angle2V += angle2A;
-    angle2V *= dampening;
-    angle2 += angle2V;
+        angle2V += angle2A;
+        angle2V *= dampening;
+        angle2 += angle2V;
 
-    weight1.pos = Vector.fromAngle(PI / 2 + angle1).setMag(LINE_1);
-    weight2.pos = Vector.add(weight1.pos, Vector.fromAngle(PI / 2 + angle2).setMag(LINE_2));
-
-    requestAnimationFrame(ani);
+        weight1.pos = Vector.fromAngle(PI / 2 + angle1).setMag(LINE_1);
+        weight2.pos = Vector.add(weight1.pos, Vector.fromAngle(PI / 2 + angle2).setMag(LINE_2));
+    }, FPS_INTERVAL);
 }
 
 init();
