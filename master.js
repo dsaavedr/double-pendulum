@@ -25,7 +25,7 @@ const canvas = document.getElementById("canvas"),
     MASS_1 = 10,
     MASS_2 = Math.round(random(1, 5)),
     G = 1.5,
-    BACKGROUND_LINE_COLOR = "rgba(0, 80, 255, 0.8)",
+    BACKGROUND_LINE_COLOR = "#FF6000",
     dampening = 0.9975;
 
 const square = num => Math.pow(num, 2);
@@ -70,7 +70,7 @@ function init() {
     weight1 = new Particle({
         pos: pos1,
         r: RADIUS,
-        c: "#88f"
+        c: "#FFA559"
     });
 
     const pos2 = Vector.fromAngle(PI / 2 + angle2).setMag(LINE_2);
@@ -78,7 +78,7 @@ function init() {
     weight2 = new Particle({
         pos: Vector.add(pos2, weight1.pos),
         r: RADIUS,
-        c: "#f88"
+        c: "#FFA559"
     });
 
     backgroundCtx.translate(WIDTH / 2, PADDING_TOP);
@@ -97,7 +97,8 @@ function ani() {
 
         ctx.save();
         ctx.beginPath();
-        ctx.strokeStyle = "white";
+        ctx.globalAlpha = 0.5;
+        ctx.strokeStyle = "#FFE6C7";
         ctx.lineWidth = 1;
         ctx.translate(WIDTH / 2, PADDING_TOP);
         ctx.moveTo(0, 0);
