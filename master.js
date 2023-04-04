@@ -9,7 +9,7 @@ let WIDTH,
     PADDING_TOP,
     RADIUS,
     LINE_WIDTH,
-    angle1 = PI / 2,
+    angle1 = random() > 0.5 ? PI / 2 : PI * 1.5,
     angle2 = random(0, 2 * PI),
     angle1V = 0,
     angle1A = 0,
@@ -30,12 +30,6 @@ const canvas = document.getElementById("canvas"),
 
 const square = num => Math.pow(num, 2);
 
-// const requestAnimationFrame =
-//     window.requestAnimationFrame ||
-//     window.mozRequestAnimationFrame ||
-//     window.webkitRequestAnimationFrame ||
-//     window.msRequestAnimationFrame;
-
 function init() {
     WIDTH = window.innerWidth;
     HEIGHT = window.innerHeight;
@@ -49,7 +43,7 @@ function init() {
         RADIUS = 10;
         LINE_WIDTH = 2;
     } else {
-        PADDING_TOP = HEIGHT * 0.15;
+        PADDING_TOP = HEIGHT * 0.25;
         LINE_1 = HEIGHT * 0.4;
         LINE_2 = HEIGHT * 0.3;
         RADIUS = 20;
